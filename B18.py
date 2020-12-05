@@ -28,7 +28,7 @@ import sys
 
 class B18:
   def __init__(self,params): 
-    self.j, self.k, self.m, self.n = params[2:]
+    self.j, self.k, self.m, self.n = map(int,params[2:])
     self.circuit={}
     f=open(params[1],'r')
     while True:
@@ -38,25 +38,34 @@ class B18:
     self.values={}
     print(self.circuit)
   
-  def percolate(self):
-    pass
-
-  def 
-
+  def percolate(self): pass
 
   def NAND(self, a, b): return not a&b
 
-  def print(self): pass
-    
-
-
+  def output(self): 
+    # print header (input pins and output pins)
+    print("---------------------------------------------")
+    print("---------------------------------------------")
+    # print rows for every possible input combo
+    for i in range(2**self.j):
+      #print row
+      for j in range(self.j-1, -1, -1):
+        #print("{2}|".format(i&(1<<j))) 
+        print(" "+str((i&(1<<j))>>j)+ " |",end='')
+      #for j in range(self.k):
+      #  print(self.values[2*self.n*self.m+j],end='')
+      print()
 
 
 def main():
-  b18 = B18(sys.argv)
-
+  g = B18(sys.argv)
+  g.output()
 
 main()
+
+
+
+
 
 
 
