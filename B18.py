@@ -43,17 +43,17 @@ class B18:
     red={}
     black={}
     for j in range(self.j): red[j]=(it&(1<<j)>>j)
-    for j in range(2*self.m): black[j]=red[self.circuit[j]]
+    #for j in range(2*self.m): black[j]=red[self.circuit[j]]
     for i in range(self.n): # concepts --> column layers 
+      for j in range(2*self.m):
+        if j+2*self.m*(i) in self.circuit:
+          black[j+2*self.m*(i)]=red[self.circuit[j+2*self.m*(i)]]
+      print("black: "+str(black))
       for j in range(self.m):
         if 2*(j+i*self.m) in black:
+          print("j: "+str(j)+" nand out idx: "+str(self.nand_out_idx(2*(j+i*self.m))))
           red[self.nand_out_idx(2*(j+i*self.m))]=self.nand(black[2*(j+i*self.m)],black[2*(j+i*self.m)+1])
       print("red: "+str(red))
-      for j in range(2*self.m):
-        if j+2*self.m*(i+1) in self.circuit:
-          black[j+2*self.m*(i+1)]=red[self.circuit[j+2*self.m*(i+1)]]
-      print("black: "+str(black))
-
 
   """ maps either input of a nand to the output label """
   def nand_out_idx(self, a): return (a//2 + self.j)
