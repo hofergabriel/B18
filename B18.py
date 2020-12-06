@@ -50,7 +50,8 @@ class B18:
         if 2*(j+i*self.m) in black:
           red[self.nand_out_idx(2*(j+i*self.m))]=self.nand(black[2*(j+i*self.m)],black[2*(j+i*self.m)+1])
     for k in range(self.k):
-      out[2*self.n*self.m+k]=red[self.circuit[2*self.n*self.m+k]]
+      if 2*self.n*self.m+k in self.circuit:
+        out[2*self.n*self.m+k]=red[self.circuit[2*self.n*self.m+k]]
     return out 
 
   """ maps either input of a nand to the output label """
@@ -61,17 +62,14 @@ class B18:
 
   """ prints the result """
   def output(self): 
-    for i in range(self.j+self.k): print('-----',end='')
+    for i in range(self.j+self.k): print('-----',end='') 
     print()
-    for i in range(self.j):
-      print("{:3} |".format(i+1),end='')
-    for i in range(self.k):
-      print("{:3} |".format(2*self.m*self.n+i),end='')
+    for i in range(self.j): print("{:3} |".format(i+1),end='')
+    for i in range(self.k): print("{:3} |".format(2*self.m*self.n+i),end='') 
     print()
-    for i in range(self.j+self.k): print('-----',end='')
+    for i in range(self.j+self.k): print('-----',end='') 
     print()
     for i in range(2**self.j):
-      #print row
       for j in range(self.j-1, -1, -1): 
         print("{:3} |".format((i&(1<<j))>>j),end='')
       out=self.update(i)
