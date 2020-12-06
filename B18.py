@@ -31,17 +31,25 @@ class B18:
   def __init__(self,params): 
     self.j, self.k, self.m, self.n = map(int,params[2:])
     self.circuit={}
+    self.circuit2={}
     f=open(params[1],'r')
     while True:
       line=f.readline().strip().split(' ')
       if line==['']: break
       self.circuit[int(line[1])]=int(line[0])
+      self.circuit2[int(line[0])]=int(line[1])
+
   
   """ update """
   def update(self,it): 
     red, black, out = {}, {}, {}
+    for j in range(len(self.inp)):
+      red[j]=int(bin(it)[2:].zfill(len(self.inp))[j:j+1])
+    
+    """
     for j in range(self.j): 
       red[j]=int(bin(it)[2:].zfill(self.j)[j:j+1])
+    """
     for i in range(self.n): # concepts --> column layers 
       for j in range(2*self.m):
         if j+2*self.m*i in self.circuit:
@@ -69,14 +77,20 @@ class B18:
     print()
     for i in range(self.j+self.k): print('-----',end='') 
     print()
-    for i in range(2**self.j):
-      for j in range(self.j-1, -1, -1): 
+
+    """ only use inputs that are keys in self.circuit """
+    self.inp=[]
+    for i in range(self.j):
+      if i in self.circuit2:
+        self.inp.append(i)
+
+    for i in range(2**len(self.inp)):
+      for j in range(len(self.inp)-1, -1, -1):
         print("{:3} |".format((i&(1<<j))>>j),end='')
       out=self.update(i)
       for i in out:
         print("{:3} |".format(out[i]),end='')
       print()
-
 
 def main():
   g = B18(sys.argv)
