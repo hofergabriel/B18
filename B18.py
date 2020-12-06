@@ -19,6 +19,10 @@ nand ouptuts are labeled
 
 we need to define a mapping for nand inputs to nand outputs
 
+self.circuit
+self.red
+self.black
+
 """
 import numpy as np
 import sys
@@ -35,37 +39,39 @@ class B18:
   
   """ update """
   """ can iterate by columns through the fpga """
-  def update(self,iteration): 
-    self.board={}
-    input_pins={}
-    for j in range(self.j): # initialize input pins
-      pins[j]=(iteration&(1<<j))>>j
-    for i in range(self.m): 
-      self.board[i]=pins[self.circuit[i]]
+  def update(self,it): 
+    red={}
+    black={}
+    for j in range(self.j): red[j]=(it&(1<<j)>>j)
+    for j in range(2*self.m): black[j]=red[self.circuit[j]]
     for i in range(self.n): # concepts --> column layers 
       for j in range(self.m):
-        self.values[self.nand_out_idx(2*j)]=self.nand(self.values[2*j],self.values[2*j+1])
+        if 2*(j+i*self.m) in black:
+          red[self.nand_out_idx(2*(j+i*self.m))]=self.nand(black[2*(j+i*self.m)],black[2*(j+i*self.m)+1])
+      print("red: "+str(red))
+      for j in range(2*self.m):
+        if j+2*self.m*(i+1) in self.circuit:
+          black[j+2*self.m*(i+1)]=red[self.circuit[j+2*self.m*(i+1)]]
+      print("black: "+str(black))
+
 
   """ maps either input of a nand to the output label """
-  def nand_out_idx(self, a): a//2 + self.j
+  def nand_out_idx(self, a): return (a//2 + self.j)
 
   """ not and """
-  def nand(self, a, b): return not (a&b)
+  def nand(self, a, b): return int(not (a&b))
 
   """ prints the result """
   def output(self): 
-    # print header (input pins and output pins)
     print("---------------------------------------------")
     print("---------------------------------------------")
-    # print rows for every possible input combo
     for i in range(2**self.j):
       #print row
-      for j in range(self.j-1, -1, -1):
-        #print("{2}|".format(i&(1<<j))) 
+      for j in range(self.j-1, -1, -1): 
         print(" "+str((i&(1<<j))>>j)+ " |",end='')
       out=self.update(i)
-      #for j in range(self.k):
-      #  print(self.values[2*self.n*self.m+j],end='')
+      for j in out: 
+        print(str(j)+" |",end='')
       print()
 
 
