@@ -45,11 +45,6 @@ class B18:
     red, black, out = {}, {}, {}
     for j in range(len(self.inp)):
       red[j]=int(bin(it)[2:].zfill(len(self.inp))[j:j+1])
-    
-    """
-    for j in range(self.j): 
-      red[j]=int(bin(it)[2:].zfill(self.j)[j:j+1])
-    """
     for i in range(self.n): # concepts --> column layers 
       for j in range(2*self.m):
         if j+2*self.m*i in self.circuit:
