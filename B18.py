@@ -61,15 +61,22 @@ class B18:
 
   """ prints the result """
   def output(self): 
-    print("---------------------------------------------")
-    print("---------------------------------------------")
+    for i in range(self.j+self.k): print('-----',end='')
+    print()
+    for i in range(self.j):
+      print("{:3} |".format(i+1),end='')
+    for i in range(self.k):
+      print("{:3} |".format(2*self.m*self.n+i),end='')
+    print()
+    for i in range(self.j+self.k): print('-----',end='')
+    print()
     for i in range(2**self.j):
       #print row
       for j in range(self.j-1, -1, -1): 
-        print(" "+str((i&(1<<j))>>j)+ " |",end='')
+        print("{:3} |".format((i&(1<<j))>>j),end='')
       out=self.update(i)
       for i in out:
-        print(" "+str(out[i])+" |",end='')
+        print("{:3} |".format(out[i]),end='')
       print()
 
 
