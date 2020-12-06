@@ -38,22 +38,30 @@ class B18:
       self.circuit[int(line[1])]=int(line[0])
   
   """ update """
-  """ can iterate by columns through the fpga """
   def update(self,it): 
-    red={}
-    black={}
-    for j in range(self.j): red[j]=(it&(1<<j)>>j)
-    #for j in range(2*self.m): black[j]=red[self.circuit[j]]
+    red, black, out = {}, {}, {}
+    print()
+    print("it: "+str(it))
+    for j in range(self.j): 
+      #red[j]=int(bin(it)[2+j:2+j+1])
+      #red[j]=((it&(1<<j))>>j)
+      print("j: "+str(j)+" --> "+str(bin(it)[2:].zfill(self.j)[j:j+1])) 
+    return {}
+    print("\nred init: "+str(red))
     for i in range(self.n): # concepts --> column layers 
       for j in range(2*self.m):
-        if j+2*self.m*(i) in self.circuit:
-          black[j+2*self.m*(i)]=red[self.circuit[j+2*self.m*(i)]]
-      print("black: "+str(black))
+        if j+2*self.m*i in self.circuit:
+          black[j+2*self.m*i]=red[self.circuit[j+2*self.m*i]]
+      print("\nblack: "+str(black))
       for j in range(self.m):
         if 2*(j+i*self.m) in black:
-          print("j: "+str(j)+" nand out idx: "+str(self.nand_out_idx(2*(j+i*self.m))))
+          #print("j: "+str(j)+" nand out idx: "+str(self.nand_out_idx(2*(j+i*self.m))))
           red[self.nand_out_idx(2*(j+i*self.m))]=self.nand(black[2*(j+i*self.m)],black[2*(j+i*self.m)+1])
-      print("red: "+str(red))
+      print("red: "+str(red)+"\n")
+    for k in range(self.k):
+      out[2*self.n*self.m+k]=red[self.circuit[2*self.n*self.m+k]]
+    print("out: "+str(out))
+    return out 
 
   """ maps either input of a nand to the output label """
   def nand_out_idx(self, a): return (a//2 + self.j)
@@ -70,8 +78,8 @@ class B18:
       for j in range(self.j-1, -1, -1): 
         print(" "+str((i&(1<<j))>>j)+ " |",end='')
       out=self.update(i)
-      for j in out: 
-        print(str(j)+" |",end='')
+      for i in out:
+        print(" "+str(i)+" |",end='')
       print()
 
 
