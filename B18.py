@@ -31,14 +31,11 @@ class B18:
   def __init__(self,params): 
     self.j, self.k, self.m, self.n = map(int,params[2:])
     self.circuit={}
-    self.circuit2={}
     f=open(params[1],'r')
     while True:
       line=f.readline().strip().split(' ')
       if line==['']: break
       self.circuit[int(line[1])]=int(line[0])
-      self.circuit2[int(line[0])]=int(line[1])
-
   
   """ update """
   def update(self,it): 
@@ -76,7 +73,7 @@ class B18:
     """ only use inputs that are keys in self.circuit """
     self.inp=[]
     for i in range(self.j):
-      if i in self.circuit2:
+      if i in self.circuit.values():
         self.inp.append(i)
 
     for i in range(2**len(self.inp)):
