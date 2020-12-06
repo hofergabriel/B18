@@ -8,7 +8,6 @@ Description: B18 Simulator
 @param m - grid array rows
 @param n - grid array cols
 
-
 input pins are labeled
 [0, j-1]
 output pins are labeled
@@ -18,9 +17,7 @@ nand inputs are labeled
 nand ouptuts are labeled
 [j, j+n*m-1]
 
-
 we need to define a mapping for nand inputs to nand outputs
-
 
 """
 import numpy as np
@@ -34,14 +31,28 @@ class B18:
     while True:
       line=f.readline().strip().split(' ')
       if line==['']: break
-      self.circuit[int(line[0])]=int(line[1])
-    self.values={}
-    print(self.circuit)
+      self.circuit[int(line[1])]=int(line[0])
   
-  def percolate(self): pass
+  """ update """
+  """ can iterate by columns through the fpga """
+  def update(self,iteration): 
+    self.board={}
+    input_pins={}
+    for j in range(self.j): # initialize input pins
+      pins[j]=(iteration&(1<<j))>>j
+    for i in range(self.m): 
+      self.board[i]=pins[self.circuit[i]]
+    for i in range(self.n): # concepts --> column layers 
+      for j in range(self.m):
+        self.values[self.nand_out_idx(2*j)]=self.nand(self.values[2*j],self.values[2*j+1])
 
-  def NAND(self, a, b): return not a&b
+  """ maps either input of a nand to the output label """
+  def nand_out_idx(self, a): a//2 + self.j
 
+  """ not and """
+  def nand(self, a, b): return not (a&b)
+
+  """ prints the result """
   def output(self): 
     # print header (input pins and output pins)
     print("---------------------------------------------")
@@ -52,6 +63,7 @@ class B18:
       for j in range(self.j-1, -1, -1):
         #print("{2}|".format(i&(1<<j))) 
         print(" "+str((i&(1<<j))>>j)+ " |",end='')
+      out=self.update(i)
       #for j in range(self.k):
       #  print(self.values[2*self.n*self.m+j],end='')
       print()
@@ -62,6 +74,13 @@ def main():
   g.output()
 
 main()
+
+
+
+
+
+
+
 
 
 
