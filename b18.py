@@ -2,27 +2,6 @@
 Author: Gabriel Hofer
 Date: December 8, 2020
 Description: B18 Simulator
-
-@param j - number of input pins
-@param k - number of output pins
-@param m - grid array rows
-@param n - grid array cols
-
-input pins are labeled
-[0, j-1]
-output pins are labeled
-[2*n*m, 2*n*m+k-1]
-nand inputs are labeled
-[0, 2*n*m-1]
-nand ouptuts are labeled
-[j, j+n*m-1]
-
-we need to define a mapping for nand inputs to nand outputs
-
-self.circuit
-self.red
-self.black
-
 """
 import numpy as np
 import sys
@@ -95,17 +74,5 @@ def main():
   g.output()
 
 main()
-
-
-
-
-
-
-
-
-
-
-
-
 
 
