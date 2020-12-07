@@ -62,20 +62,26 @@ class B18:
 
   """ prints the result """
   def output(self): 
-    for i in range(self.j+self.k): print('-----',end='') 
+    in_cnt=int(0)
+    for i in range(self.j):
+      if i in self.circuit.values():
+        in_cnt+=int(1);
+    out_cnt=int(0)
+    for i in range(self.k):
+      if i+2*self.n*self.m in self.circuit:
+        out_cnt+=int(1)
+    for i in range(in_cnt+out_cnt): print('-----',end='') 
     print()
-    for i in range(self.j): print("{:3} |".format(i+1),end='')
-    for i in range(self.k): print("{:3} |".format(2*self.m*self.n+i),end='') 
+    for i in range(in_cnt): print("{:3} |".format(i),end='')
+    for i in range(out_cnt): print("{:3} |".format(2*self.m*self.n+i),end='') 
     print()
-    for i in range(self.j+self.k): print('-----',end='') 
+    for i in range(in_cnt+out_cnt): print('-----',end='') 
     print()
-
     """ only use inputs that are keys in self.circuit """
     self.inp=[]
     for i in range(self.j):
       if i in self.circuit.values():
         self.inp.append(i)
-
     for i in range(2**len(self.inp)):
       for j in range(len(self.inp)-1, -1, -1):
         print("{:3} |".format((i&(1<<j))>>j),end='')
